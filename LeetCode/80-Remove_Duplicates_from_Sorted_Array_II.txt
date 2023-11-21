@@ -1,0 +1,55 @@
+Leetcode 80 - Remove Duplicates from Sorted Array II
+
+    Same idea as problem 26, however this time we want at most two of the sample element to show up in the Array
+    
+    Same idea of a slow and fast pointer
+    This time we need to know whether or not we have hit the two mark
+    If not, if we find another instance of the same number move it as well
+    If we have, search for the next number again
+
+    First solution:
+    int removeDuplicates(vector<int>& nums) {
+        // Slow pointer will double as the count of elements (return value)
+        int slow = 0;
+        int fast = 1;   
+
+        // If two is zero we have not found two of the same element
+        // If two is zero, we have found two of the same element
+        bool two = 0;
+
+
+        while (fast < nums.size())
+        {
+            if (nums[slow] != nums[fast])
+            {
+                nums[++slow] = nums[fast++];
+                two = 0;
+            }
+            else if (nums[slow] == nums[fast] && !two)
+            {
+                nums[++slow] = nums[fast++];
+                two = 1;
+            }
+            else 
+            {
+                fast++;
+            }
+        }
+
+        return slow + 1;
+    }
+
+    This is the solution that the editorial had
+    There was a pretty elegant solution in the solutions tab:
+    int removeDuplicates(vector<int>& nums) {
+        int i = 0;
+        for (int n : nums)
+            if (i < 2 || n > nums[i-2])
+                nums[i++] = n;
+        return i;
+    }   
+    Pretty much this leaves the first two elements how they are
+    Then for every element after if the number two places before that is less than it then we want to put it into the array
+    Leaves room so that if we already have two of the same element in the array then it will be 5 > 5 which will be false
+
+    Very cool solution

@@ -1,0 +1,124 @@
+Leetcode 88 - Merge Sorted Array
+
+	Two arrays sorted in NON-DECREASING ORDER (ie i <= i + 1)
+	m and n represent the number of elements in each array
+	
+	Goal: 
+    Merge nums1 and nums2 into a single array of non-decreasing order
+	The function shouldn't return the array, rather it should be stored in nums1
+
+	Ideas:
+	Create a deep copy of nums1 and perform a two pointer approach where we check which value is smaller nums1[i] or nums2[j], putting the smaller of the two into nums1
+	
+	Two pointer approach, however when nums2[j] is smaller than nums1 (idea wouldn't work stopping there)
+
+	First idea would use extra memory, but be fast. Maybe there is a better way that I am not seeing that won't use the extra memory but this will suffice for now.
+
+	Solution attempt:
+	Deep copy of nums1, with double pointer to join the two arrays into nums1
+
+	Failed Solution:
+	void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        vector<int> nums1copy;
+
+        // Deep copy nums1
+        for (int i = 0; i < m; ++i)
+        {
+            cout << i;
+            nums1copy.push_back(nums1[i]);
+            // cout << (nums1copy[i]);
+        }
+
+
+        
+        // Two pointers
+        int i = 0;
+        int j = 0;
+
+        // Pointer for where to put the element in nums1
+        int k = 0;
+
+        while (k < m + n)
+        {
+            if (nums1copy[i] < nums2[j] && i < m)
+            {
+                nums1[k++] = nums1copy[i++];
+            } 
+            else
+            {
+                nums1[k++] = nums2[j++];
+            }
+        }
+    }
+
+	Error was that we were trying to access nums2[j] when nums2[j] had no elements
+
+	The way to do it without space is cool, you start from the end of the array rather than the start, iterating backwards so you don't have to worry about overwriting important values!
+	Had to add that if j == n also go with nums1
+
+	Solution:
+	void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        vector<int> nums1copy;
+
+        // Deep copy nums1
+        for (int i = 0; i < m; ++i)
+        {
+            cout << i;
+            nums1copy.push_back(nums1[i]);
+            cout << nums1copy.size();
+            // cout << (nums1copy[i]);
+        }
+
+        // Two pointers
+        int i = 0;
+        int j = 0;
+
+        // Pointer for where to put the element in nums1
+        int k = 0;
+
+        while (k < m + n)
+        {
+            if (j == n || (i < m && nums1copy[i] < nums2[j]))
+            {
+                nums1[k++] = nums1copy[i++];
+            } 
+            else
+            {
+                nums1[k++] = nums2[j++];
+            }
+        }
+    }
+	
+	Beats 48.67% on runtime and 17.95% on space (must be a way to do it without the copy!)
+
+    The way to do it without the deep copy is quite cool
+    You initialize the pointers to the end of the arrays rather than the start to prevent overwriting values that you haven't sorted into the array yet!
+
+    No extra space solution: 
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        // Two pointers
+        int i = m - 1;
+        int j = n - 1;
+
+        // Pointer for where to put the element in nums1
+        int k = m + n - 1;
+
+        // Keep iterating until you have gone through each element of both arrays
+        while (i >= 0 || j >= 0)
+        {
+            if (j < 0) 
+            {
+                break;
+            }
+            if (i >= 0 && nums1[i] > nums2[j])
+            {
+                nums1[k--] = nums1[i--];
+            } 
+            else
+            {
+                nums1[k--] = nums2[j--];
+            }
+        }
+    }
+
+    Beats 33.98% on runtime and 75.4% on space
