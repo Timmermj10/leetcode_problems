@@ -1,0 +1,56 @@
+Leetcode 121 - Best time to Buy and Sell Stock
+
+    You are given an array prices where prices[i] is the price of a given stock on the ith day.
+
+    You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
+
+    Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.
+
+    Basic Solution:
+    Uses a max profit, smallest cost, highest cost, reseting the smallest and highest cost when we see a new smallest value and check for higher profit every time we see a new highest than lowest value
+
+    int maxProfit(vector<int>& prices) {
+        int max = 0;
+        int lowest = prices[0];
+        int highest = prices[0];
+
+        for (int price: prices)
+        {
+            if (price < lowest)
+            {
+                lowest = price;
+                highest = price;
+            }
+            else if (price > highest)
+            {
+                highest = price;
+                if (highest - lowest > max) 
+                {
+                    max = highest - lowest;
+                }
+            }
+        }
+
+        return max;
+    }
+
+    A little cleaner code:
+
+    int maxProfit(vector<int>& prices) {
+        int max = 0;
+        int lowest = prices[0];
+
+        for (int price: prices)
+        {
+            if (price < lowest)
+            {
+                lowest = price;
+            }
+            else if (price - lowest > max)
+            {
+                max = price - lowest;
+            }
+        }
+
+        return max;
+    }
